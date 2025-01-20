@@ -1,19 +1,15 @@
 name: Release
-
 on:
   # Run the workflow each time new commits are pushed to the candidate branch. 
   push:
-    branches: [ "candidate" ]
+    branches: ["candidate"]
   workflow_dispatch:
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 permissions:
   contents: read
   issues: write
-
 jobs:
   get-architectures:
     name: 🖥 Get snap architectures
@@ -25,7 +21,6 @@ jobs:
       - name: 🖥 Get snap architectures
         id: get-architectures
         uses: snapcrafters/ci/get-architectures@main
-
   release:
     name: 🚢 Release to latest/candidate
     needs: get-architectures
@@ -42,7 +37,6 @@ jobs:
           launchpad-token: ${{ secrets.LP_BUILD_SECRET }}
           repo-token: ${{ secrets.SNAPCRAFTERS_BOT_COMMIT }}
           store-token: ${{ secrets.SNAP_STORE_CANDIDATE }}
-  
   call-for-testing:
     name: 📣 Create call for testing
     needs: [release, get-architectures]
@@ -57,7 +51,6 @@ jobs:
         with:
           architectures: ${{ needs.get-architectures.outputs.architectures }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-  
   screenshots:
     name: 📸 Gather screenshots
     needs: call-for-testing

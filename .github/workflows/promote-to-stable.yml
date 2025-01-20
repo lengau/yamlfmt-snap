@@ -1,13 +1,10 @@
 name: Promote
-
 on:
   issue_comment:
     types:
       - created
-
 permissions:
   issues: write
-
 jobs:
   promote:
     name: ⬆️ Promote to stable
